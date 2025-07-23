@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Counts</title>
+</head>
+<body>
+    <div class="mainDrawer-content" style="padding: 2em;">
+        <h1>Movie View Counts</h1>
+        <div id="viewCountsContainer">
+            <!-- Movie counts will be loaded here -->
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        document.addEventListener('pageshow', function () {
+            const container = document.getElementById('viewCountsContainer');
+            container.innerHTML = '<p>Loading movie data...</p>';
+
+            // Use the Emby API to get all movies
+            ApiClient.getItems(Dashboard.getCurrentUserId(), {
+                IncludeItemTypes: "Movie",
+                Recursive: true,
+                Fields: "Tags"
+            }).then(function (result) {
+                let html = '<ul>';
+                const viewCountPrefix = 'view-count:';
+
+                if (result.Items.length > 0) {
+                    result.Items.forEach(function (item) {
+                        let viewCount = 0;
+                        const viewTag = item.Tags.find(t => t.Name.startsWith(viewCountPrefix));
+
+                        if (viewTag) {
+                            viewCount = parseInt(viewTag.Name.substring(viewCountPrefix.length), 10) || 0;
+                        }
+
+                        html += `<li>${item.Name} - <strong>Views: ${viewCount}</strong></li>`;
+                    });
+                } else {
+                    html += '<li>No movies found.</li>';
+                }
+
+                html += '</ul>';
+                container.innerHTML = html;
+            }).catch(function (error) {
+                container.innerHTML = '<p>Error loading data. Please try again.</p>';
+                console.error(error);
+            });
+        });
+    </script>
+</body>
+</html>
