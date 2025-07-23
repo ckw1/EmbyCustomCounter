@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4  # Updated to latest checkout version for consistency
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4  # Updated to latest setup-dotnet version
       with:
         dotnet-version: '6.0.x' # Match the .NET version for Emby plugins
 
@@ -25,7 +25,9 @@ jobs:
       run: dotnet build --configuration Release --no-restore
 
     - name: Upload build artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4  # Upgraded to v4
       with:
         name: ViewCounterPlugin
         path: ViewCounter/bin/Release/**/*.dll
+        # Optional: Add if your build includes hidden files
+        # include-hidden-files: true
