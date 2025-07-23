@@ -11,23 +11,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4  # Updated to latest checkout version for consistency
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    # Optional: This step helps debug by showing the file structure.
+    - name: List files in the repository
+      run: ls -R
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4  # Updated to latest setup-dotnet version
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '6.0.x' # Match the .NET version for Emby plugins
 
     - name: Restore dependencies
       run: dotnet restore
+      working-directory: ./ViewCounter # Run this command inside the ViewCounter directory
 
     - name: Build
       run: dotnet build --configuration Release --no-restore
+      working-directory: ./ViewCounter # Also run the build command from here
 
     - name: Upload build artifact
-      uses: actions/upload-artifact@v4  # Upgraded to v4
+      uses: actions/upload-artifact@v4
       with:
         name: ViewCounterPlugin
+        # The path is relative to the repository root, so it remains correct.
         path: ViewCounter/bin/Release/**/*.dll
-        # Optional: Add if your build includes hidden files
-        # include-hidden-files: true
