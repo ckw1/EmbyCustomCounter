@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <!-- This ensures the final DLL is named ViewCounter.dll -->
+    <AssemblyName>ViewCounter</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- This is the official Emby Server SDK from NuGet. 
+         The 'dotnet restore' command will download it automatically. -->
+    <PackageReference Include="Emby.Server.Sdk" Version="4.8.0.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- This line is essential. It tells the compiler to embed your HTML file 
+         into the plugin DLL so Emby can display it. -->
+    <EmbeddedResource Include="Configuration\configPage.html" />
+  </ItemGroup>
+
+</Project>
